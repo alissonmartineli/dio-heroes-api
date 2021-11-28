@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  mongo:
+    container_name: heroes-api-mongo
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - heroes-api-network
+    volumes:
+      - heroes-api-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: heroes
+
+  mongo-express:
+    container_name: heroes-api-mongo-express
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    networks:
+      - heroes-api-network
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+
+networks:
+  heroes-api-network:
+    name: heroes-api
+
+volumes:
+  heroes-api-data:
+    name: heroes-api
